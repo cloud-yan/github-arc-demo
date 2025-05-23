@@ -7,38 +7,7 @@ jobs:
     container:
       image: alpine:latest
     steps:
-    - name: Cluster Illusion
-      run: |
-        echo "🔮 Kubernetes Magic Show Starting..."
-        echo "✨ Pod Name: $(hostname)"
-        echo "📦 Container Info:"
-        cat /etc/os-release | grep PRETTY_NAME || echo "No OS info available"
-        
-        echo "💫 Creating magic without external tools..."
-        echo "🐇 Pretending to create a deployment..."
-        echo 'apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: k8s-rabbit
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: rabbit
-  template:
-    metadata:
-      labels:
-        app: rabbit
-    spec:
-      containers:
-      - name: rabbit
-        image: alpine
-        command: ["sleep", "infinity"]' > rabbit.yaml
-
-        echo "🎩 Would apply this manifest if kubectl was installed:"
-        cat rabbit.yaml
-        echo "✅ Magic complete!"
-        
-        echo "🎩 Now watch it disappear..."
-        ./kubectl delete deployment k8s-rabbit
-        echo "✅ Magic complete!"
+      - run: |
+          echo "Hello from Kubernetes!"
+          echo "Running on pod: $(hostname)"
+          echo "This proves your runner is working in k8s"

@@ -1,0 +1,21 @@
+name: demo-ci
+on: [push]
+
+jobs:
+  deploy-magic:
+    runs-on: gh-runners-arc-scale-set  # My private k8s cluster
+    container:
+      image: alpine:latest
+    steps:
+      - name: Cluster Illusion
+        run: |
+          echo "🔮 Behold - I'm running in Kubernetes!"
+          echo "✨ Pod Name: $(hostname)"
+          echo "📦 Container: $(cat /etc/os-release | grep PRETTY_NAME)"
+          echo "⚡️ Node Info: $(kubectl get nodes -o wide | tail -1)"
+          echo "💫 Creating a Kubernetes rabbit..."
+          kubectl create deployment k8s-rabbit --image=alpine -- sleep infinity
+          kubectl get pods -w &
+          sleep 3
+          echo "🎩 Now watch it disappear..."
+          kubectl delete deployment k8s-rabbit

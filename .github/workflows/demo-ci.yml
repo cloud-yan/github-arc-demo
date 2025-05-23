@@ -7,27 +7,37 @@ jobs:
     container:
       image: alpine:latest
     steps:
-    - name: Setup kubectl
-      run: |
-        echo "🔧 Installing kubectl..."
-        curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-        chmod +x kubectl
-        sudo mv kubectl /usr/local/bin/
-        
     - name: Cluster Illusion
       run: |
-        echo "🔮 Behold - I'm running in Kubernetes!"
+        echo "🔮 Kubernetes Magic Show Starting..."
         echo "✨ Pod Name: $(hostname)"
-        echo "📦 Container: $(cat /etc/os-release | grep PRETTY_NAME)"
+        echo "📦 Container Info:"
+        cat /etc/os-release | grep PRETTY_NAME || echo "No OS info available"
         
-        echo "⚡️ Node Info:"
-        ./kubectl get nodes -o wide | tail -1
-        
-        echo "💫 Creating a Kubernetes rabbit..."
-        ./kubectl create deployment k8s-rabbit --image=alpine -- sleep infinity
-        sleep 5
-        echo "🐇 Rabbit Pod:"
-        ./kubectl get pods
+        echo "💫 Creating magic without external tools..."
+        echo "🐇 Pretending to create a deployment..."
+        echo 'apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-rabbit
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbit
+  template:
+    metadata:
+      labels:
+        app: rabbit
+    spec:
+      containers:
+      - name: rabbit
+        image: alpine
+        command: ["sleep", "infinity"]' > rabbit.yaml
+
+        echo "🎩 Would apply this manifest if kubectl was installed:"
+        cat rabbit.yaml
+        echo "✅ Magic complete!"
         
         echo "🎩 Now watch it disappear..."
         ./kubectl delete deployment k8s-rabbit
